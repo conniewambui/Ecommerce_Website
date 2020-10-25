@@ -13,10 +13,19 @@ def cart(request):
         order, created = Order.objects.filter(customer=customer, complete=False)
         items = order.orderitem_set.all()
     else:
-        items= []   
-    context={'items' : items}
+        items= [] 
+        order = {'get_cart_total':0, 'get_cart_total':0}  
+    context={'items' : items, 'order': order}
     return render(request, 'store/cart.html', context)
 
 def checkout(request):
-    context={}   
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.filter(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+    else:
+        items= [] 
+        order = {'get_cart_total':0, 'get_cart_total':0}  
+    context={'items' : items, 'order': order}
     return render(request, 'store/checkout.html', context) 
